@@ -92,7 +92,7 @@ public class MainActivity extends Activity implements OnClickListener{
     public class Server implements Runnable {
         
         private DatagramSocket socket;
-
+        private byte[] buf = new byte[17];
 		@Override
         public void run() {
             while(serverStart==false)
@@ -102,19 +102,20 @@ public class MainActivity extends Activity implements OnClickListener{
                 InetAddress serverAddr = InetAddress.getByName(SERVERIP);
                 updatetrack("\nServer: Start connecting\n");
                 socket = new DatagramSocket(SERVERPORT, serverAddr);
-         } catch (Exception e) {
-          updatetrack("Server: Error!\n");
-        }
-        	while(true){
-            while(serverStart==false)
-            {
+            } catch (Exception e) {
+               updatetrack("Server: Error!\n");
             }
+        	while(true){
+/*            while(serverStart==false)
+            {
+            }*/
                 try {
 
-                        byte[] buf = new byte[17];
+
                         DatagramPacket packet = new DatagramPacket(buf, buf.length);
                         updatetrack("Server: Receiving\n");
                         socket.receive(packet);
+                        updatetrack("Server: Message received from '" + (packet.getAddress()) + "'\n");
                         updatetrack("Server: Message received: '" + new String(packet.getData()) + "'\n");
                         updatetrack("Server: Succeed!\n");
                 } catch (Exception e) {
